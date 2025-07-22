@@ -2,6 +2,7 @@ package edu.ifma.dcomp.lpweb.frete.api.controller;
 
 import edu.ifma.dcomp.lpweb.frete.domain.model.Cliente;
 import edu.ifma.dcomp.lpweb.frete.domain.service.ClienteService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,25 +34,7 @@ public class ClienteController {
         }
     }
 
-//versao 01
-    @GetMapping("/{id}/v1")
-    public Cliente buscaPor(@PathVariable Integer id ) {
-        return service.buscaPor(id ).orElse(null);
-    }
-
-    //versao 02
-    @GetMapping("/{id}/v2")
-    public ResponseEntity<Cliente> buscaPorV2(@PathVariable Integer id) {
-        Optional<Cliente> optional = service.buscaPor(id);
-
-        if (optional.isPresent()) {
-            return ResponseEntity.ok(optional.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @GetMapping("/{id}/v3")
+    @GetMapping("/{id}")
     public ResponseEntity<Cliente> buscaPorV3(@PathVariable Integer id) {
        return service.buscaPor(id)
                .map(ResponseEntity::ok )   //.map(cliente -> ResponseEntity.ok(cliente))
@@ -59,20 +42,8 @@ public class ClienteController {
 
     }
 
-    // versão 01
-  @PostMapping
-  public Cliente cadastrar(@RequestBody Cliente cliente ) {
-        return service.salva(cliente );
-  }
-
-    @PostMapping("/v2")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Cliente cadastrarv2(@RequestBody Cliente cliente ) {
-        return service.salva(cliente );
-    }
-
-    @PostMapping("/v3")
-    public ResponseEntity<Cliente> cadastrov3(@RequestBody Cliente cliente, UriComponentsBuilder builder ) {
+    @PostMapping
+    public ResponseEntity<Cliente> cadastro(@Valid @RequestBody Cliente cliente, UriComponentsBuilder builder ) {
 
         final Cliente clienteSalvo = service.salva(cliente);
 
@@ -84,7 +55,7 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> atualiza(@PathVariable Integer id, @RequestBody Cliente cliente) {
+    public ResponseEntity<Cliente> atualiza(@Valid @PathVariable Integer id, @RequestBody Cliente cliente) {
 
         if (service.naoExisteClienteCom(id ) ) {
             return ResponseEntity.notFound().build();
@@ -97,7 +68,7 @@ public class ClienteController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> remover(@PathVariable Integer id) {
+    public ResponseEntity<?> remove(@PathVariable Integer id) {
         Optional<Cliente> optional = service.buscaPor(id );
 
         if (optional.isPresent()) {

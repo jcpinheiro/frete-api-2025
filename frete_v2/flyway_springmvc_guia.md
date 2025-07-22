@@ -1,12 +1,13 @@
 
 # 🛠️ Como Adicionar FlywayDB em um Projeto Spring MVC
 
-Este guia explica como adicionar o FlywayDB a um projeto **Spring MVC** para gerenciar a versão da base de dados, usando como exemplo a criação da tabela `cliente`.
+Este guia explica como adicionar o FlywayDB a um projeto ***Spring MVC*** para 
+gerenciar a versão da base de dados, usando como exemplo a criação da tabela `cliente`.
 
 ---
-## ✅ Etapa 1: Adicionar a dependência Flyway
+## ✅ Passo 1: Adicionar a dependência Flyway
 
-No arquivo `pom.xml`, adicione:
+### No arquivo `pom.xml`, adicione:
 
 ```xml
 <dependency>
@@ -21,9 +22,9 @@ No arquivo `pom.xml`, adicione:
 
 ---
 
-## ✅ Etapa 2: Configurar o Banco de Dados
+## ✅ Passo 2: Configurar o Banco de Dados
 
-No arquivo `src/main/resources/application.properties`:
+### No arquivo `src/main/resources/application.properties`:
 
 ```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/seubanco?createDatabaseIfNotExist=true&serverTimezone=UTC
@@ -31,10 +32,10 @@ spring.datasource.username=seuusuario
 spring.datasource.password=suasenha
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 
-# Habilita o Flyway
+# Habilita o Flyway (já é a configuração padrão)
 spring.flyway.enabled=true
 
-# Local padrão das migrations
+# Local padrão das migrations (também já é a configuração padrão)
 spring.flyway.locations=classpath:db/migration
 ```
 
@@ -42,7 +43,7 @@ spring.flyway.locations=classpath:db/migration
 
 ---
 
-## ✅ Etapa 3: Criar a Migration da Tabela `cliente`
+## ✅ Passo 3: Criar a Migration da Tabela `cliente`
 
 Crie o arquivo `V1__create_table_cliente.sql` em:
 ```
@@ -66,7 +67,7 @@ Conteúdo:
 
 ---
 
-## ✅ Etapa 4: Rodar a Aplicação
+## ✅ Passo 4: Rodar a Aplicação
 
 Ao iniciar a aplicação Spring:
 
