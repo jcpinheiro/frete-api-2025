@@ -44,7 +44,6 @@ public class ClienteController {
 
     @PostMapping
     public ResponseEntity<Cliente> cadastro(@Valid @RequestBody Cliente cliente, UriComponentsBuilder builder ) {
-
         final Cliente clienteSalvo = service.salva(cliente);
 
         final URI uri = builder

@@ -55,7 +55,7 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> atualiza(@PathVariable Integer id, @RequestBody Cliente cliente) {
+    public ResponseEntity<Cliente> atualiza(@PathVariable Integer id, @Valid @RequestBody Cliente cliente) {
 
         if (service.naoExisteClienteCom(id ) ) {
             return ResponseEntity.notFound().build();

@@ -18,7 +18,8 @@ public class Cliente {
     private String nome;
 
     @NotBlank
-    @Pattern(regexp = "\\(\\d{2}\\) \\d{4,5}-\\d{4}", message = "O telefone deve estar no formato (99) 99999-9999")
+    @Pattern(regexp = "\\(\\d{2}\\) \\d{4,5}-\\d{4}",
+             message = "Deve estar no formato (99) 99999-9999")
     private String telefone;
 
     @NotBlank @Email  @Size(max = 100)

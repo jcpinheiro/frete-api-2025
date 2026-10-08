@@ -5,6 +5,8 @@ import edu.ifma.dcomp.lpweb.frete.domain.exception.NegocioException;
 import edu.ifma.dcomp.lpweb.frete.domain.model.Cliente;
 import edu.ifma.dcomp.lpweb.frete.domain.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -60,4 +62,21 @@ public class ClienteService {
         return !repository.existsById(id );
     }
 
+    public List<Cliente> pesquisaByExample(String nome, String email) {
+
+        var cliente = new Cliente();
+        cliente.setNome(nome);
+        cliente.setEmail(email);
+
+        //Example<Cliente> clienteExample = Example.of(cliente);
+
+        ExampleMatcher matcher = ExampleMatcher
+                .matching()
+                .withIgnoreNullValues()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+
+        Example<Cliente> clienteExample =  Example.of(cliente, matcher);
+        return repository.findAll(clienteExample );
+    }
 }

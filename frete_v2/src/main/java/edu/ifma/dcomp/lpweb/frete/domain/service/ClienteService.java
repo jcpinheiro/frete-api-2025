@@ -38,6 +38,11 @@ public class ClienteService {
         return repository.save(cliente);
     }
 
+    public Iterable<Cliente> salvarLista(Iterable<Cliente> clientes) {
+        return repository.saveAll(clientes );
+    }
+
+
     @Transactional
     public void removePelo(Integer id) {
         repository.deleteById(id);

@@ -4,7 +4,10 @@ import edu.ifma.dcomp.lpweb.frete.domain.model.Cliente;
 import edu.ifma.dcomp.lpweb.frete.domain.service.ClienteService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -24,49 +27,78 @@ public class ClienteController {
         this.service = clienteService;
     }
 
-  // versao 01
-  @GetMapping
-  public List<Cliente> lista(String nome ) {
-        if (nome == null ) {
+    // versao 01
+    @GetMapping
+    public List<Cliente> lista(String nome) {
+        if (nome == null) {
             return service.todos();
         } else {
-            return service.buscaPor(nome );
+            return service.buscaPor(nome);
         }
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Cliente> buscaPor(@PathVariable Integer id) {
-       return service.buscaPor(id)
-               .map(ResponseEntity::ok )   //.map(cliente -> ResponseEntity.ok(cliente))
-               .orElse(ResponseEntity.notFound().build());
+        return service.buscaPor(id)
+                .map(ResponseEntity::ok)   //.map(cliente -> ResponseEntity.ok(cliente))
+                .orElse(ResponseEntity.notFound().build());
 
     }
+
+
+/*    public List<Cliente> pesquisa(String nome, String email ) {
+        if (nome != null && email != null) {
+            return service.buscaNomeOuEmail(nome, email);
+        }
+        if (nome != null) {
+            return service.buscaPorNome(nome);
+
+        }
+        if (email != null) {
+            return service.buscaPorEmail(email);
+        }
+     }*/
+
 
     @GetMapping("/paginacao/{numPagina}/{qtdPagina}")
     public Iterable<Cliente> buscaPaginada(@PathVariable int numPagina,
-                                           @PathVariable int qtdPagina ) {
-        if (qtdPagina > 10) qtdPagina = 10;
+                                           @PathVariable int qtdPagina) {
+        if (qtdPagina > 10)
+            qtdPagina = 10;
         PageRequest page = PageRequest.of(numPagina, qtdPagina);
-        return service.buscaPaginada(page );
+        return service.buscaPaginada(page);
 
     }
 
+ /*   @GetMapping("/byexample")
+    public ResponseEntity<List<Cliente>> pesquisaByExample(
+            @RequestParam(value="nome", required = false) String nome,
+            @RequestParam(value = "email" required=true) String email ) {*/
+
+
+    @GetMapping("/byexample")
+    public ResponseEntity<List<Cliente>> pesquisaByExample(String nome, String email) {
+        List<Cliente> resultado = service.pesquisaByExample(nome, email);
+        return ResponseEntity.ok(resultado );
+    }
+
+
     @PostMapping
-    public ResponseEntity<Cliente> cadastro(@Valid @RequestBody Cliente cliente, UriComponentsBuilder builder ) {
+    public ResponseEntity<Cliente> cadastro(@Valid @RequestBody Cliente cliente, UriComponentsBuilder builder) {
 
         final Cliente clienteSalvo = service.salva(cliente);
 
         final URI uri = builder
-                     .path("/clientes/{id}")
-                     .buildAndExpand(clienteSalvo.getId()).toUri();
+                .path("/clientes/{id}")
+                .buildAndExpand(clienteSalvo.getId()).toUri();
 
-        return ResponseEntity.created(uri).body(clienteSalvo );
+        return ResponseEntity.created(uri).body(clienteSalvo);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Cliente> atualiza(@PathVariable Integer id, @RequestBody Cliente cliente) {
 
-        if (service.naoExisteClienteCom(id ) ) {
+        if (service.naoExisteClienteCom(id)) {
             return ResponseEntity.notFound().build();
 
         } else {
@@ -78,7 +110,7 @@ public class ClienteController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> remover(@PathVariable Integer id) {
-        Optional<Cliente> optional = service.buscaPor(id );
+        Optional<Cliente> optional = service.buscaPor(id);
 
         if (optional.isPresent()) {
             service.removePelo(id);

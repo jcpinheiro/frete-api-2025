@@ -3,6 +3,7 @@ package edu.ifma.dcomp.lpweb.frete.controller;
 import edu.ifma.dcomp.lpweb.frete.model.Cliente;
 import edu.ifma.dcomp.lpweb.frete.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,8 +14,9 @@ public class ClienteController {
     @Autowired
     private ClienteRepository clienteRepository;
 
-    @GetMapping("/cliente")
+    @GetMapping("/clientes")
     public List<Cliente> getClientes() {
         return clienteRepository.findAll();
     }
+
 }

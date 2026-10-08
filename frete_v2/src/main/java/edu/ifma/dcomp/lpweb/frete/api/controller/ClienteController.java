@@ -33,8 +33,8 @@ public class ClienteController {
         }
     }
 
-//versao 01
-    @GetMapping("/{id}/v1")
+  //versao 01
+    @GetMapping("/{id}")
     public Cliente buscaPor(@PathVariable Integer id ) {
         return service.buscaPor(id ).orElse(null);
     }
@@ -61,7 +61,7 @@ public class ClienteController {
 
     // versão 01
   @PostMapping
-  public Cliente cadastrar(@RequestBody Cliente cliente ) {
+  public Cliente salvar(@RequestBody Cliente cliente ) {
         return service.salva(cliente );
   }
 
@@ -72,7 +72,8 @@ public class ClienteController {
     }
 
     @PostMapping("/v3")
-    public ResponseEntity<Cliente> cadastrov3(@RequestBody Cliente cliente, UriComponentsBuilder builder ) {
+    public ResponseEntity<Cliente> cadastrov3(@RequestBody Cliente cliente,
+                                              UriComponentsBuilder builder ) {
 
         final Cliente clienteSalvo = service.salva(cliente);
 
@@ -82,6 +83,18 @@ public class ClienteController {
 
         return ResponseEntity.created(uri).body(clienteSalvo );
     }
+
+    @PostMapping("/salvarLista")
+    public ResponseEntity<Iterable<Cliente>> salvarLista(@RequestBody Iterable<Cliente> clientes,
+                                         UriComponentsBuilder builder) {
+
+        final Iterable<Cliente> clientesSalvos = service.salvarLista(clientes );
+        final URI uri = builder.path("/clientes")
+                .buildAndExpand(clientesSalvos).toUri();
+
+        return ResponseEntity.created(uri).body(clientesSalvos);
+    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Cliente> atualiza(@PathVariable Integer id, @RequestBody Cliente cliente) {

@@ -11,19 +11,20 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
-
+/*
     private final MessageSource messageSource;
 
     public ApiExceptionHandler(MessageSource messageSource) {
         this.messageSource = messageSource;
-    }
-
+    }*/
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    //@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public ErrosDeValidacao handle(MethodArgumentNotValidException exception) {
 
         ErrosDeValidacao erros = new ErrosDeValidacao(LocalDateTime.now(),
@@ -32,8 +33,11 @@ public class ApiExceptionHandler {
         List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
 
         fieldErrors.forEach(field -> {
+             /*
             String mensagem = messageSource.getMessage(field, LocaleContextHolder.getLocale());
             erros.adiciona( new Erro(field.getField(), mensagem) );
+*/
+            erros.adiciona( new Erro(field.getField(), field.getDefaultMessage()) );
         });
 
         return erros;
