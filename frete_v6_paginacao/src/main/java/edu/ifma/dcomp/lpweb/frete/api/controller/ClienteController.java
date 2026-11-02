@@ -42,9 +42,7 @@ public class ClienteController {
         return service.buscaPor(id)
                 .map(ResponseEntity::ok)   //.map(cliente -> ResponseEntity.ok(cliente))
                 .orElse(ResponseEntity.notFound().build());
-
     }
-
 
 /*    public List<Cliente> pesquisa(String nome, String email ) {
         if (nome != null && email != null) {
@@ -65,7 +63,9 @@ public class ClienteController {
                                            @PathVariable int qtdPagina) {
         if (qtdPagina > 10)
             qtdPagina = 10;
-        PageRequest page = PageRequest.of(numPagina, qtdPagina);
+        //PageRequest page = PageRequest.of( numPagina, qtdPagina );
+        PageRequest page = PageRequest.of( numPagina, qtdPagina,
+                                           Sort.by("nome").descending());
         return service.buscaPaginada(page);
 
     }

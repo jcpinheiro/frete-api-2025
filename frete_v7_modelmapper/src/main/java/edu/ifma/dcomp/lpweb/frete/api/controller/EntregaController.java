@@ -48,8 +48,8 @@ public class EntregaController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public EntregaResponse solicitar(@Valid @RequestBody EntregaRequest entregaInput) {
-		Entrega novaEntrega = entregaMapperAdapter.toEntity(entregaInput);
+	public EntregaResponse solicitar(@Valid @RequestBody EntregaRequest entregaRequest) {
+		Entrega novaEntrega = entregaMapperAdapter.toEntity(entregaRequest);
 		Entrega entregaSolicitada = solicitacaoEntregaService.solicitar(novaEntrega);
 
 		return entregaMapperAdapter.toEntregaResponse(entregaSolicitada );
